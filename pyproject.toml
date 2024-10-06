@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "abc"
+version = "0.1.0"
+description = ""
+authors = ["Skuru23 <98009221+Skuru23@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+firebase-admin = "^6.5.0"
+pyrebase4 = "^4.8.0"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+alembic = "^1.13.3"
+sqlmodel = "^0.0.22"
+pydantic-settings = "^2.5.2"
+pymysql = "^1.1.1"
+pandas = "^2.2.3"
+chardet = "^5.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
