@@ -28,7 +28,7 @@ class Settings(BaseSettings):
         host = values.get("DB_HOST")
         port = values.get("DB_PORT")
         database = values.get("DB_DATABASE")
-        
+
         return URL(
             drivername=f"{connection}+pymysql",
             username=username,
@@ -36,12 +36,12 @@ class Settings(BaseSettings):
             host=host,
             port=int(port) if port else None,
             database=database,
-            query=[]
+            query=[],
         ).render_as_string(hide_password=False)
 
     class Config:
         case_sensitive = True
-        env_file = "backend/.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 

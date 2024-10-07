@@ -1,11 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-import pyrebase
-import firebase_admin
-from firebase_admin import credentials
-import firebase_admin.app_check
-
 from api.v1.api import routers
 from core.response import BadRequestResponse, AccessDeniedResponse, UnauthorizedResponse
 from core.exception import (
