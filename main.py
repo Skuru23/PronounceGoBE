@@ -1,3 +1,5 @@
+import time
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,6 +21,9 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["content-disposition"],
 )
+
+
+os.environ["TZ"] = "Asia/Ho_Chi_Minh"
 
 app.include_router(routers, prefix="/api/v1")
 
