@@ -32,6 +32,16 @@ def signup(request: SignupRequest, db: Session = Depends(get_db)):
     return auth_services.signup(db, request)
 
 
+@router.get(
+    "/refresh-token", response_model=TokenResponse, responses=public_api_responses
+)
+async def refresh_token(
+    refresh_token: str,
+    db: Session = Depends(get_db),
+):
+    return auth_services.refresh_token(db, refresh_token)
+
+
 @router.get("/me", response_model=GetMeResponse, responses=authenticated_api_responses)
 async def me(
     current_user: Annotated[User, Depends(get_current_user)],
