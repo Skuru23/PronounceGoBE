@@ -38,3 +38,13 @@ def get_current_user(
         return user
     else:
         raise UnauthorizedException(error_code=ErrorCode.ERR_UNAUTHORIZED)
+
+
+def get_user_if_logged_in(
+    db: Annotated[Session, Depends(get_db)],
+    token: Annotated[str, Depends(oauth2_scheme)],
+):
+    if token:
+        return get_current_user(db, token)
+
+    return None
