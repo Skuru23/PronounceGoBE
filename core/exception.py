@@ -37,6 +37,7 @@ class ErrorCode:
     ERR_INTERNAL_SERVER_ERROR = "ERR_INTERNAL_SERVER_ERROR"
     ERR_USER_EXISTED = "ERR_USER_EXISTED"
     ERR_TOKEN_EXPIRED = "ERR_TOKEN_EXPIRED"
+    ERR_WORD_NOT_FOUND = "ERR_WORD_NOT_FOUND"
 
 
 class ErrorMessage:
@@ -44,3 +45,4 @@ class ErrorMessage:
     ERR_ACCESS_DENIED = "You can not access"
     ERR_INTERNAL_SERVER_ERROR = "Server error"
     ERR_USER_EXISTED = "This user is existed"
+    ERR_WORD_NOT_FOUND = "Word not found"
