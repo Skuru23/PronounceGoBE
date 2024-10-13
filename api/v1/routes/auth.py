@@ -17,7 +17,17 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/signup", status_code=HTTPStatus.NO_CONTENT, response_class=public_api_responses
+    "/signup", status_code=HTTPStatus.NO_CONTENT, responses=public_api_responses
 )
 def signup(request: SignupRequest, db: Session = Depends(get_db)):
     return auth_services.signup(db, request)
+
+
+@router.get(
+    "/refresh-token", response_model=TokenResponse, responses=public_api_responses
+)
+async def refresh_token(
+    refresh_token: str,
+    db: Session = Depends(get_db),
+):
+    return auth_services.refresh_token(db, refresh_token)
