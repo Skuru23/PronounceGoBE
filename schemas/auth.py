@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 from typing import Annotated
 
@@ -17,3 +18,11 @@ class SignupRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+
+class TokenResponse(BaseModel):
+    token_type: str
+    access_token: str
+    expire_at: datetime
+    refresh_token: str
+    refresh_expire_at: datetime

@@ -15,6 +15,12 @@ class Settings(BaseSettings):
     DB_PASSWORD: Optional[str]
     SQLALCHEMY_DATABASE_URL: str = ""
 
+    ACCESS_TOKEN_EXPIRE_MINUTES: Optional[int]
+    REFRESH_TOKEN_EXPIRE_MINUTES: Optional[int]
+
+    SECRET_KEY: Optional[str]
+    ALGORITHM: Optional[str]
+
     @validator("SQLALCHEMY_DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str) and v:
