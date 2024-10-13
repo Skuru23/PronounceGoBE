@@ -2,6 +2,8 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 from typing import Annotated
 
+from schemas.user import UserBase
+
 
 class LoginResponse(BaseModel):
     id: int
@@ -26,3 +28,7 @@ class TokenResponse(BaseModel):
     expire_at: datetime
     refresh_token: str
     refresh_expire_at: datetime
+
+
+class GetMeResponse(UserBase):
+    pass
