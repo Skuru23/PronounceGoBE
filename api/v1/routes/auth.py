@@ -5,16 +5,19 @@ from schemas.auth import LoginResponse, LoginRequest, SignupRequest, TokenRespon
 from db.databse import get_db
 from sqlmodel import Session
 from core.config import settings
+from core.response import authenticated_api_responses, public_api_responses
 from api.v1.services import auth as auth_services
 
 router = APIRouter()
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=TokenResponse, responses=public_api_responses)
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     return auth_services.login(request, db)
 
 
-@router.post("/signup", status_code=HTTPStatus.NO_CONTENT)
+@router.post(
+    "/signup", status_code=HTTPStatus.NO_CONTENT, response_class=public_api_responses
+)
 def signup(request: SignupRequest, db: Session = Depends(get_db)):
     return auth_services.signup(db, request)
