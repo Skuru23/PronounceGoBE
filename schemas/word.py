@@ -13,3 +13,15 @@ class WordBase(BaseModel):
 
 class WordDetailResponse(WordBase):
     pass
+
+
+class CheckPronounceResponse(BaseModel):
+    text: str
+    ipa: str
+    error: list[int]
+    point: int
+
+
+class CheckPronounceRequest(BaseModel):
+    result_text: str
+    expect_text: str

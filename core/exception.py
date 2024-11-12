@@ -39,6 +39,8 @@ class ErrorCode:
     ERR_TOKEN_EXPIRED = "ERR_TOKEN_EXPIRED"
     ERR_WORD_NOT_FOUND = "ERR_WORD_NOT_FOUND"
 
+    ERR_GROUP_EXISTED = "ERR_GROUP_EXISTED"
+
 
 class ErrorMessage:
     ERR_UNAUTHORIZED = "You are not authorized"
@@ -46,3 +48,4 @@ class ErrorMessage:
     ERR_INTERNAL_SERVER_ERROR = "Server error"
     ERR_USER_EXISTED = "This user is existed"
     ERR_WORD_NOT_FOUND = "Word not found"
+    ERR_GROUP_EXISTED = "Group is already existed"
