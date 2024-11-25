@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from api.v1.dependencies.authentication import get_current_user
@@ -11,6 +12,8 @@ from api.v1.services import word as word_services
 from schemas.word import (
     CheckPronounceRequest,
     CheckPronounceResponse,
+    ListingWordRequest,
+    ListingWordResponse,
     WordDetailResponse,
 )
 
@@ -44,3 +47,16 @@ def check_pronounce(
     return CheckPronounceResponse(
         text=request.expect_text, ipa=ipa, error=errors, point=score
     )
+
+
+@router.get(
+    "",
+    response_model=ListingWordResponse,
+    responses=public_api_responses,
+)
+def listing_word(
+    request: Annotated[ListingWordRequest, Depends(ListingWordRequest)],
+    db: Session = Depends(get_db),
+):
+    words = word_services.listing_words(db, request)
+    return ListingWordResponse(data=words)

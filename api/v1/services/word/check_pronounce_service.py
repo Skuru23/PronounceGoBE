@@ -6,7 +6,7 @@ from schemas.word import CheckPronounceRequest
 
 def check_pronounce(db: Session, request: CheckPronounceRequest):
     score, ipa, errors = check_pronounce_word(
-        db, request.result_text, request.expect_text
+        db, request.result_text.lower(), request.expect_text.lower()
     )
     return int(score * 100), ipa, errors
 
@@ -19,6 +19,9 @@ def check_pronounce_word(db: Session, speech_text: str, result_text: str):
         return 1, speech_text_ipa, []
 
     result_text_ipa = db.exec(select(Word.ipa).where(Word.word == result_text)).first()
+
+    if (not speech_text_ipa) or (not result_text_ipa):
+        return 1, speech_text_ipa, []
 
     accuracy_rate, error_ids = compare_ipa(speech_text_ipa, result_text_ipa)
 

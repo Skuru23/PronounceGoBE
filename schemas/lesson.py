@@ -1,4 +1,5 @@
 from typing import List, Optional
+from fastapi import Query
 from pydantic import BaseModel
 from sqlmodel import Field
 
@@ -18,3 +19,25 @@ class CreatePersonLessonRequest(BaseModel):
     is_public: bool
     word_ids: List[int] = Field(default=[])
     sentence_list: List[str] = Field(default=[])
+
+
+class GetLessonQuery(BaseModel):
+    is_public: Optional[bool] = Field(Query(None))
+    user_owner_id: Optional[str] = Field(Query(None))
+    group_owner_id: Optional[str] = Field(Query(None))
+    keyword: Optional[str] = Field(Query(None))
+
+
+class ListLessonsItem(BaseModel):
+    id: int
+    name: Optional[str]
+    description: Optional[str]
+    user_owner_id: Optional[int]
+    group_owner_id: Optional[int]
+    is_public: Optional[bool]
+    total_like: Optional[int]
+    creator: Optional[str]
+
+
+class ListLessonsResponse(BaseModel):
+    data: List[ListLessonsItem] = []

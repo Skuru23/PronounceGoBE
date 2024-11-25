@@ -5,6 +5,7 @@ from .lesson_sentence import LessonSentence
 from .lesson_word import LessonWord
 from .group import Group
 from .group_member import GroupMember
+from .lesson_like import LessonLike
 
 __all__ = (
     "User",
@@ -14,4 +15,5 @@ __all__ = (
     "LessonWord",
     "Group",
     "GroupMember",
+    "LessonLike",
 )
