@@ -3,6 +3,9 @@ from fastapi import Query
 from pydantic import BaseModel
 from sqlmodel import Field
 
+from schemas.lesson_sentence import LessonSentenceBase
+from schemas.word import WordBase
+
 
 class LessonBase(BaseModel):
     id: Optional[int]
@@ -41,3 +44,8 @@ class ListLessonsItem(BaseModel):
 
 class ListLessonsResponse(BaseModel):
     data: List[ListLessonsItem] = []
+
+
+class GetLessonDetailResponse(LessonBase):
+    word_list: Optional[List[WordBase]] = Field(default=[])
+    sentence_list: Optional[List[LessonSentenceBase]] = Field(default=[])

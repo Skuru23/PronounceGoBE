@@ -30,7 +30,7 @@ def listing_group(db: Session, query_params: GetGroupsQueryParams):
             Group.name,
             Group.description,
             Group.owner_id,
-            User.name,
+            User.name.label("creator"),
             subquery.c.total_member,
             subquery.c.total_lesson,
             subquery.c.total_like,
@@ -39,12 +39,11 @@ def listing_group(db: Session, query_params: GetGroupsQueryParams):
         .join(subquery, subquery.c.id == Group.id)
         .where(*conditions)
         .order_by(Group.id.desc())
-        .limit(query_params.per_page)
-        .offset((query_params.page - 1) * query_params.per_page)
+        # .limit(query_params.per_page)
+        # .offset((query_params.page - 1) * query_params.per_page)
     )
 
     groups = db.exec(query).mappings().all()
-
     total = _count_group(db, conditions)
     return groups, total
 

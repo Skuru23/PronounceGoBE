@@ -16,6 +16,7 @@ class CreateGroupRequest(BaseModel):
 
 
 class GetGroupItem(GroupBase):
+    creator: str
     total_member: int = Field(default=0)
     total_lesson: int = Field(default=0)
     total_like: int = Field(default=0)
@@ -29,7 +30,7 @@ class GetGroupsResponse(BaseModel):
 
 
 class GetGroupsQueryParams(BaseModel):
-    page: Optional[int] = Query(default=1)
-    per_page: Optional[int] = Query(default=10)
+    # page: Optional[int] = Query(default=1)
+    # per_page: Optional[int] = Query(default=10)
     name: Optional[str] = Query(default=None)
     sort_by: Optional[str] = Query(default=None)

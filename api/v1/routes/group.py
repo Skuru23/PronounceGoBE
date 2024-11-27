@@ -28,13 +28,11 @@ def create_group(
 
 
 @router.get("", response_model=GetGroupsResponse, responses=authenticated_api_responses)
-def create_group(
+def listing_group(
     query_params: Annotated[GetGroupsQueryParams, Depends(GetGroupsQueryParams)] = None,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
     groups, total = group_services.listing_group(db, query_params)
 
-    return GetGroupsResponse(
-        page=query_params.page, per_page=query_params.per_page, total=total, data=groups
-    )
+    return GetGroupsResponse(page=1, per_page=10, total=total, data=groups)

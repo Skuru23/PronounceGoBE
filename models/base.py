@@ -11,6 +11,7 @@ class BaseCreateUpdateModel:
         sa_type=TIMESTAMP(timezone=True),
         sa_column_kwargs={
             "server_default": func.now(),
+            "nullable": True,
         },
     )
     updated_at: datetime = Field(
@@ -18,6 +19,7 @@ class BaseCreateUpdateModel:
         sa_type=TIMESTAMP(timezone=True),
         sa_column_kwargs={
             "onupdate": func.now(),
+            "nullable": True,
         },
     )
     created_by: Optional[int] = Field(
