@@ -1,7 +1,7 @@
 import requests
 from sqlalchemy import update
 from sqlmodel import select
-from db.databse import get_db
+from db.database import get_db
 from models.word import Word
 
 db = next(get_db())

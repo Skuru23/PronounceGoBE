@@ -8,7 +8,7 @@ from sqlmodel import Session, select
 from core.config import settings
 
 from core.exception import ErrorCode, UnauthorizedException
-from db.databse import get_db
+from db.database import get_db
 from models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/", auto_error=False)

@@ -40,6 +40,9 @@ class ErrorCode:
     ERR_WORD_NOT_FOUND = "ERR_WORD_NOT_FOUND"
 
     ERR_GROUP_EXISTED = "ERR_GROUP_EXISTED"
+    ERR_PROGRESS_NOT_FOUND = "ERR_PROGRESS_NOT_FOUND"
+    ERR_PROGRESS_WORD_NOT_FOUND = "ERR_PROGRESS_WORD_NOT_FOUND"
+    ERR_PROGRESS_SENTENCE_NOT_FOUND = "ERR_PROGRESS_SENTENCE_NOT_FOUND"
 
 
 class ErrorMessage:
@@ -49,3 +52,6 @@ class ErrorMessage:
     ERR_USER_EXISTED = "This user is existed"
     ERR_WORD_NOT_FOUND = "Word not found"
     ERR_GROUP_EXISTED = "Group is already existed"
+    ERR_PROGRESS_NOT_FOUND = "Progress not found"
+    ERR_PROGRESS_WORD_NOT_FOUND = "Progress word not found"
+    ERR_PROGRESS_SENTENCE_NOT_FOUND = "Progress sentence not found"

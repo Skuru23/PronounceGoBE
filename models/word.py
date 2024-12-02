@@ -13,7 +13,7 @@ class Word(SQLModel, BaseCreateUpdateModel, table=True):
     }
     id: Optional[int] = Field(default=None, primary_key=True)
     word: Optional[str] = Field(
-        sa_column=Column(String(64), nullable=True), default=None
+        sa_column=Column(String(64), nullable=True, index=True), default=None
     )
     ipa: Optional[str] = Field(
         sa_column=Column(String(64), nullable=True), default=None

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from api.v1.dependencies.authentication import get_current_user
 from core.response import authenticated_api_responses
-from db.databse import get_db
+from db.database import get_db
 from models.user import User
 from schemas.group import (
     CreateGroupRequest,

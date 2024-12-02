@@ -11,7 +11,7 @@ from schemas.auth import (
     SignupRequest,
     TokenResponse,
 )
-from db.databse import get_db
+from db.database import get_db
 from sqlmodel import Session
 from core.config import settings
 from core.response import authenticated_api_responses, public_api_responses

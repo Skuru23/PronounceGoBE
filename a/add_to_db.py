@@ -1,5 +1,5 @@
 import pandas as pd
-from db.databse import get_db
+from db.database import get_db
 
 from models.word import Word
 

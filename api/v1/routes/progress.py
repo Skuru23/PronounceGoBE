@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from api.v1.dependencies.authentication import get_current_user
 from core.response import authenticated_api_responses, public_api_responses
-from db.databse import get_db
+from db.database import get_db
 from models.user import User
 from schemas.lesson import (
     CreatePersonLessonRequest,
@@ -12,8 +12,8 @@ from schemas.lesson import (
     GetLessonQuery,
     ListLessonsResponse,
 )
-from api.v1.services import lesson as lesson_services
-from schemas.progress import ListingProgressResponse
+from api.v1.services import progress as progress_services
+from schemas.progress import ListingProgressResponse, ProgressDetailResponse
 
 router = APIRouter()
 
@@ -22,23 +22,23 @@ router = APIRouter()
 def listing_progress(
     db: Session = Depends(get_db), user: User = Depends(get_current_user)
 ):
-    lessons = lesson_services.get_lessons(db, query)
+    progresses = progress_services.listing_progress(db, user)
 
-    return ListLessonsResponse(data=lessons)
+    return ListingProgressResponse(data=progresses)
 
 
-# @router.get(
-#     "/{lesson_id}",
-#     response_model=GetLessonDetailResponse,
-#     responses=public_api_responses,
-# )
-# def listing_lessons(
-#     lesson_id: int,
-#     db: Session = Depends(get_db),
-#     user: User = Depends(get_current_user),
-# ):
-#     lesson = lesson_services.get_lesson_detail(db, lesson_id)
-#     return lesson
+@router.get(
+    "/{progress_id}",
+    response_model=ProgressDetailResponse,
+    responses=public_api_responses,
+)
+def get_progress_detail(
+    progress_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    progress = progress_services.get_progress_detail(db, progress_id)
+    return progress
 
 
 # @router.post(
