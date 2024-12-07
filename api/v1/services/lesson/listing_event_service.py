@@ -3,6 +3,7 @@ from sqlalchemy import func
 from sqlmodel import Session, select
 from models import Lesson
 from models.lesson_like import LessonLike
+from models.progress import Progress
 from models.user import User
 from schemas.lesson import (
     GetLessonQuery,
@@ -10,6 +11,18 @@ from schemas.lesson import (
 
 
 def get_lessons(db: Session, query_params: GetLessonQuery):
+    learner_subquery = (
+        select(Lesson.id, func.count(Progress.id).label("total_learners"))
+        .outerjoin(Progress, Progress.lesson_id == Lesson.id)
+        .group_by(Lesson.id)
+    ).subquery()
+
+    like_subquery = (
+        select(Lesson.id, func.count(Progress.id).label("total_likes"))
+        .outerjoin(LessonLike, LessonLike.lesson_id == Lesson.id)
+        .group_by(Lesson.id)
+    )
+
     base_query = (
         select(
             Lesson.id,
@@ -19,9 +32,11 @@ def get_lessons(db: Session, query_params: GetLessonQuery):
             Lesson.group_owner_id,
             Lesson.is_public,
             User.name.label("creator"),
-            func.count(LessonLike.id).label("total_like"),
+            learner_subquery.c.total_learners,
+            like_subquery.c.total_likes,
         )
-        .outerjoin(LessonLike, Lesson.id == LessonLike.lesson_id)
+        .join(learner_subquery, learner_subquery.c.id == Lesson.id)
+        .join(like_subquery, like_subquery.c.id == Lesson.id)
         .join(User, Lesson.user_owner_id == User.id)
         .group_by(Lesson.id)
         .order_by(Lesson.created_at.desc())

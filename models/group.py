@@ -21,3 +21,6 @@ class Group(SQLModel, BaseCreateUpdateModel, table=True):
     owner_id: Optional[int] = Field(
         sa_column=Column(Integer, nullable=True), default=None
     )
+    image_path: Optional[str] = Field(
+        sa_column=Column(String(2048), nullable=True), default=None
+    )

@@ -1772,6 +1772,17 @@ files = [
 jwcrypto = ">=1.4.2"
 
 [[package]]
+name = "python-multipart"
+version = "0.0.19"
+description = "A streaming multipart parser for Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python_multipart-0.0.19-py3-none-any.whl", hash = "sha256:f8d5b0b9c618575bf9df01c684ded1d94a338839bdd8223838afacfb4bb2082d"},
+    {file = "python_multipart-0.0.19.tar.gz", hash = "sha256:905502ef39050557b7a6af411f454bc19526529ca46ae6831508438890ce12cc"},
+]
+
+[[package]]
 name = "pytz"
 version = "2024.2"
 description = "World timezone definitions, modern and historical"
@@ -2043,4 +2054,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c939a84ccdd26502dfbf2bd441b4f8bec1a389d1e5dd9a2bfc0ed6127c04f1c8"
+content-hash = "277d2957db8f21364a55d53accd3a93a8c98cc8c96e3ef2a90e691aaed9fa98d"

@@ -11,6 +11,7 @@ from schemas.lesson import (
     GetLessonDetailResponse,
     GetLessonQuery,
     ListLessonsResponse,
+    UpdateLessonRequest,
 )
 from api.v1.services import lesson as lesson_services
 
@@ -20,7 +21,7 @@ router = APIRouter()
 @router.post(
     "", status_code=HTTPStatus.NO_CONTENT, responses=authenticated_api_responses
 )
-def create_person_lesson(
+def create_lesson(
     request: CreatePersonLessonRequest,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
@@ -43,10 +44,10 @@ def listing_lessons(
     response_model=GetLessonDetailResponse,
     responses=public_api_responses,
 )
-def listing_lessons(
+def get_lesson_detail(
     lesson_id: int,
     db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
+    # user: User = Depends(get_current_user),
 ):
     lesson = lesson_services.get_lesson_detail(db, lesson_id)
     return lesson
@@ -63,3 +64,17 @@ def learn_lesson(
     user: User = Depends(get_current_user),
 ):
     lesson_services.learn_lesson(db, user, lesson_id)
+
+
+@router.put(
+    "/{lesson_id}",
+    status_code=HTTPStatus.NO_CONTENT,
+    responses=authenticated_api_responses,
+)
+def update_lesson(
+    lesson_id: int,
+    request: UpdateLessonRequest,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    lesson_services.update_lesson(db, user, lesson_id, request)

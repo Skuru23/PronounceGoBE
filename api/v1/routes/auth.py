@@ -45,7 +45,6 @@ async def refresh_token(
 @router.get("/me", response_model=GetMeResponse, responses=authenticated_api_responses)
 async def me(
     current_user: Annotated[User, Depends(get_current_user)],
-    db: Session = Depends(get_db),
 ):
     return GetMeResponse(
         id=current_user.id,
@@ -54,4 +53,5 @@ async def me(
         name=current_user.name,
         phone=current_user.phone,
         address=current_user.address,
+        image_path=current_user.image_path,
     )

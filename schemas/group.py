@@ -13,6 +13,7 @@ class GroupBase(BaseModel):
 class CreateGroupRequest(BaseModel):
     name: str
     description: str
+    image_path: Optional[str] = None
 
 
 class GetGroupItem(GroupBase):

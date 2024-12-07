@@ -17,7 +17,10 @@ def create_group(db: Session, user: User, request: CreateGroupRequest):
             )
 
         group = Group(
-            name=request.name, description=request.description, owner_id=user.id
+            name=request.name,
+            description=request.description,
+            owner_id=user.id,
+            image_path=request.image_path,
         )
         db.add(group)
         db.flush()

@@ -32,3 +32,6 @@ class Lesson(SQLModel, BaseCreateUpdateModel, table=True):
     is_public: Optional[bool] = Field(
         sa_column=Column(Boolean, nullable=True), default=None
     )
+    image_path: Optional[str] = Field(
+        sa_column=Column(String(2048), nullable=True), default=None
+    )

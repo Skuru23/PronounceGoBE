@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     SECRET_KEY: Optional[str]
     ALGORITHM: Optional[str]
+    IMG_DIR: Optional[str]
 
     @validator("SQLALCHEMY_DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:

@@ -20,8 +20,10 @@ class CreatePersonLessonRequest(BaseModel):
     name: str
     description: Optional[str] = Field(default=None)
     is_public: bool
+    group_owner_id: Optional[int] = Field(default=None)
     word_ids: List[int] = Field(default=[])
     sentence_list: List[str] = Field(default=[])
+    image_path: Optional[str] = Field(default=None)
 
 
 class GetLessonQuery(BaseModel):
@@ -38,7 +40,8 @@ class ListLessonsItem(BaseModel):
     user_owner_id: Optional[int]
     group_owner_id: Optional[int]
     is_public: Optional[bool]
-    total_like: Optional[int]
+    total_likes: Optional[int]
+    total_learners: Optional[int]
     creator: Optional[str]
 
 
@@ -49,3 +52,11 @@ class ListLessonsResponse(BaseModel):
 class GetLessonDetailResponse(LessonBase):
     word_list: Optional[List[WordBase]] = Field(default=[])
     sentence_list: Optional[List[LessonSentenceBase]] = Field(default=[])
+
+
+class UpdateLessonRequest(BaseModel):
+    name: str
+    description: Optional[str] = Field(default=None)
+    is_public: bool
+    word_ids: List[int] = Field(default=[])
+    sentence_list: List[str] = Field(default=[])

@@ -42,3 +42,7 @@ class User(SQLModel, BaseCreateUpdateModel, table=True):
         ),
         default=None,
     )
+
+    image_path: Optional[str] = Field(
+        sa_column=Column(String(2048), nullable=True), default=None
+    )

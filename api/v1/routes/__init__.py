@@ -6,6 +6,8 @@ from .lesson import router as lesson_router
 from .group import router as group_router
 from .progress import router as progress_router
 from .learn import router as learn_router
+from .image import router as image_router
+from .user import router as user_router
 
 router = APIRouter()
 
@@ -15,3 +17,5 @@ router.include_router(lesson_router, prefix="/lessons", tags=["lessons"])
 router.include_router(group_router, prefix="/groups", tags=["groups"])
 router.include_router(progress_router, prefix="/progresses", tags=["progress"])
 router.include_router(learn_router, prefix="/learn", tags=["learn"])
+router.include_router(image_router, prefix="/images", tags=["images"])
+router.include_router(user_router, prefix="/users", tags=["users"])

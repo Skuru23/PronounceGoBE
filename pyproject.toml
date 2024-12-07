@@ -20,6 +20,7 @@ pandas = "^2.2.3"
 chardet = "^5.2.0"
 passlib = "^1.7.4"
 bcrypt = "^4.2.0"
+python-multipart = "^0.0.19"
 
 
 [build-system]
