@@ -10,6 +10,7 @@ from schemas.lesson import (
     CreatePersonLessonRequest,
     GetLessonDetailResponse,
     GetLessonQuery,
+    LearnLessonResponse,
     ListLessonsResponse,
     UpdateLessonRequest,
 )
@@ -29,12 +30,15 @@ def create_lesson(
     lesson_services.create_lesson(db, user, request)
 
 
-@router.get("", response_model=ListLessonsResponse, responses=public_api_responses)
+@router.get(
+    "", response_model=ListLessonsResponse, responses=authenticated_api_responses
+)
 def listing_lessons(
     query: Annotated[GetLessonQuery, Depends(GetLessonQuery)],
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
-    lessons = lesson_services.get_lessons(db, query)
+    lessons = lesson_services.get_lessons(db, query, user)
 
     return ListLessonsResponse(data=lessons)
 
@@ -42,20 +46,20 @@ def listing_lessons(
 @router.get(
     "/{lesson_id}",
     response_model=GetLessonDetailResponse,
-    responses=public_api_responses,
+    responses=authenticated_api_responses,
 )
 def get_lesson_detail(
     lesson_id: int,
     db: Session = Depends(get_db),
-    # user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ):
-    lesson = lesson_services.get_lesson_detail(db, lesson_id)
+    lesson = lesson_services.get_lesson_detail(db, user, lesson_id)
     return lesson
 
 
 @router.post(
     "/{lesson_id}/learn",
-    status_code=HTTPStatus.NO_CONTENT,
+    response_model=LearnLessonResponse,
     responses=authenticated_api_responses,
 )
 def learn_lesson(
@@ -63,7 +67,8 @@ def learn_lesson(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    lesson_services.learn_lesson(db, user, lesson_id)
+    progress_id = lesson_services.learn_lesson(db, user, lesson_id)
+    return LearnLessonResponse(progress=progress_id)
 
 
 @router.put(
@@ -78,3 +83,29 @@ def update_lesson(
     user: User = Depends(get_current_user),
 ):
     lesson_services.update_lesson(db, user, lesson_id, request)
+
+
+@router.patch(
+    "/{lesson_id}/like",
+    status_code=HTTPStatus.NO_CONTENT,
+    responses=authenticated_api_responses,
+)
+def like_lesson(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    lesson_services.like_lesson(db, user, lesson_id)
+
+
+@router.patch(
+    "/{lesson_id}/unlike",
+    status_code=HTTPStatus.NO_CONTENT,
+    responses=authenticated_api_responses,
+)
+def unlike_lesson(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    lesson_services.unlike_lesson(db, user, lesson_id)

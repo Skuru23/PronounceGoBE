@@ -31,14 +31,16 @@ def learn_word(db: Session, user: User, progress_word_id: int, speech_text: str)
         )
 
     word = db.exec(
-        select(Word).where(
-            Word.id == LessonWord.word_id, LessonWord.id == ProgressWord.item_id
-        )
+        select(Word)
+        .join(LessonWord, LessonWord.word_id == Word.id)
+        .where(LessonWord.id == progress_word.item_id)
     ).first()
     if not word:
         raise BadRequestException(
             ErrorCode.ERR_WORD_NOT_FOUND, ErrorMessage.ERR_WORD_NOT_FOUND
         )
+
+    print(word.word)
     accuracy_rate, result_text_ipa, error_ids = check_pronounce_word(
         db, speech_text, word.word
     )

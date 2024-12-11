@@ -5,6 +5,7 @@ from models.lesson import Lesson
 from models.lesson_sentence import LessonSentence
 from models.lesson_word import LessonWord
 from models.progress import Progress
+from models.progress_sentence import ProgressSentence
 from models.progress_word import ItemStatus, ProgressWord
 from models.user import User
 
@@ -12,7 +13,7 @@ from models.user import User
 def learn_lesson(db: Session, user: User, lesson_id: int):
     lesson = db.exec(select(Lesson).where(Lesson.id == lesson_id)).first()
 
-    if lesson.user_owner_id != user.id:
+    if (not lesson.is_public) and (lesson.user_owner_id != user.id):
         if not lesson.group_owner_id:
             raise BadRequestException(error_code=ErrorCode.ERR_ACCESS_DENIED)
 
@@ -45,13 +46,16 @@ def learn_lesson(db: Session, user: User, lesson_id: int):
             select(LessonSentence).where(LessonSentence.lesson_id == lesson_id)
         ).all()
         progress_sentences = [
-            ProgressWord(
+            ProgressSentence(
                 progress_id=progress.id, item_id=item.id, status=ItemStatus.NOT_STARTED
             )
             for item in lesson_sentences
         ]
         db.add_all(progress_sentences)
         db.commit()
+        db.flush()
+
+        return progress.id
 
     except Exception as e:
         db.rollback()

@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Boolean, Column, Enum, String, Integer
+from sqlalchemy import TIMESTAMP, Boolean, Column, Enum, String, Integer
 from sqlmodel import Field, SQLModel
 
 from models.base import BaseCreateUpdateModel
@@ -20,4 +21,11 @@ class GroupMember(SQLModel, BaseCreateUpdateModel, table=True):
     )
     is_manager: Optional[int] = Field(
         sa_column=Column(Boolean, nullable=True), default=False
+    )
+    approved_at: Optional[datetime] = Field(
+        sa_column=Column(
+            TIMESTAMP,
+            nullable=True,
+        ),
+        default=None,
     )

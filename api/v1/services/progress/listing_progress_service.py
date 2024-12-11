@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import and_, func
 from sqlmodel import Session, select
 
 from models.lesson import Lesson
@@ -15,9 +15,20 @@ def listing_progress(db: Session, user: User):
             func.count(ProgressWord.id.distinct()).label("remain_word"),
             func.count(ProgressSentence.id.distinct()).label("remain_sentence"),
         )
-        .outerjoin(ProgressWord, ProgressWord.progress_id == Progress.id)
-        .outerjoin(ProgressSentence, ProgressSentence.progress_id == Progress.id)
-        .where(ProgressWord.status != ItemStatus.DONE)
+        .outerjoin(
+            ProgressWord,
+            and_(
+                ProgressWord.progress_id == Progress.id,
+                ProgressWord.status != ItemStatus.DONE,
+            ),
+        )
+        .outerjoin(
+            ProgressSentence,
+            and_(
+                ProgressSentence.progress_id == Progress.id,
+                ProgressSentence.status != ItemStatus.DONE,
+            ),
+        )
         .group_by(Progress.id)
         .subquery()
     )
@@ -36,7 +47,7 @@ def listing_progress(db: Session, user: User):
             .join(Lesson, Lesson.id == Progress.lesson_id)
             .outerjoin(ProgressWord, ProgressWord.progress_id == Progress.id)
             .outerjoin(ProgressSentence, ProgressSentence.progress_id == Progress.id)
-            .join(subquery, subquery.c.id == Progress.id)
+            .outerjoin(subquery, subquery.c.id == Progress.id)
             .where(Progress.user_id == user.id)
             .group_by(Progress.id)
             .order_by(Progress.id.desc())

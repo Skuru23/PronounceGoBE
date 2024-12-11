@@ -1,6 +1,9 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 
+from schemas.progress_sentence import ProgressSentenceDetailItem
+from schemas.progress_word import ProgressWordDetailItem
+
 
 class ProgressBase(BaseModel):
     id: int
@@ -17,7 +20,7 @@ class ListingProgressItem(ProgressBase):
 
 
 class ListingProgressResponse(BaseModel):
-    data: Optional[List[ListingProgressItem]] = Field(default=None)
+    data: List[ListingProgressItem] = Field(default=[])
 
 
 class ProgressDetailResponse(ProgressBase):
@@ -29,3 +32,9 @@ class ProgressDetailResponse(ProgressBase):
     total_sentence: Optional[int] = Field(default=0)
     remain_sentence: Optional[int] = Field(default=0)
     finish_percent: Optional[int] = Field(default=0)
+    words: List[ProgressWordDetailItem] = Field(
+        [], description="List of words in the lesson"
+    )
+    sentences: List[ProgressSentenceDetailItem] = Field(
+        [], description="List of sentences in the lesson"
+    )

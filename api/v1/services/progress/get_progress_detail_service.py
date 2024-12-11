@@ -4,10 +4,13 @@ from sqlmodel import Session, case, select
 from core.exception import BadRequestException, ErrorCode, ErrorMessage
 from models.group import Group
 from models.lesson import Lesson
+from models.lesson_sentence import LessonSentence
+from models.lesson_word import LessonWord
 from models.progress import Progress
 from models.progress_sentence import ProgressSentence
 from models.progress_word import ItemStatus, ProgressWord
 from models.user import User
+from models.word import Word
 
 
 def get_progress_detail(db: Session, progress_id: int):
@@ -66,5 +69,43 @@ def get_progress_detail(db: Session, progress_id: int):
         )
         * 100
     )
+
+    progress_word = (
+        db.exec(
+            select(
+                ProgressWord.id,
+                ProgressWord.progress_id,
+                ProgressWord.item_id,
+                ProgressWord.status,
+                Word.word,
+                Word.id.label("word_id"),
+                Word.ipa,
+            )
+            .join(LessonWord, LessonWord.id == ProgressWord.item_id)
+            .join(Word, LessonWord.word_id == Word.id)
+            .where(ProgressWord.progress_id == progress_id)
+        )
+        .mappings()
+        .all()
+    )
+
+    progress_sentence = (
+        db.exec(
+            select(
+                ProgressSentence.id,
+                ProgressSentence.progress_id,
+                ProgressSentence.item_id,
+                LessonSentence.sentence,
+                ProgressSentence.status,
+            )
+            .join(LessonSentence, LessonSentence.id == ProgressSentence.item_id)
+            .where(ProgressSentence.progress_id == progress_id)
+        )
+        .mappings()
+        .all()
+    )
+
+    progress["words"] = progress_word
+    progress["sentences"] = progress_sentence
 
     return progress

@@ -8,6 +8,8 @@ from db.database import get_db
 from models.user import User
 from schemas.group import (
     CreateGroupRequest,
+    GetGroupDetailResponse,
+    GetGroupMembersResponse,
     GetGroupsQueryParams,
     GetGroupsResponse,
 )
@@ -33,6 +35,41 @@ def listing_group(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    groups, total = group_services.listing_group(db, query_params)
+    groups, total = group_services.listing_group(db, user, query_params)
 
     return GetGroupsResponse(page=1, per_page=10, total=total, data=groups)
+
+
+@router.get(
+    "/{group_id}",
+    response_model=GetGroupDetailResponse,
+    responses=authenticated_api_responses,
+)
+def get_group_detail(
+    group_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)
+):
+    return group_services.get_group_detail(db, user, group_id)
+
+
+@router.patch(
+    "/{group_id}/join",
+    status_code=HTTPStatus.NO_CONTENT,
+    responses=authenticated_api_responses,
+)
+def join_group(
+    group_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)
+):
+    return group_services.join_group(db, user, group_id)
+
+
+@router.get(
+    "/{group_id}/members",
+    response_model=GetGroupMembersResponse,
+    responses=authenticated_api_responses,
+)
+def get_group_members(
+    group_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)
+):
+    members = group_services.get_group_members(db, user, group_id)
+
+    return GetGroupMembersResponse(data=members)

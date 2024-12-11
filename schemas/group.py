@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 from fastapi import Query
 from pydantic import BaseModel, Field
@@ -21,6 +22,8 @@ class GetGroupItem(GroupBase):
     total_member: int = Field(default=0)
     total_lesson: int = Field(default=0)
     total_like: int = Field(default=0)
+    image_path: Optional[str] = None
+    is_member: Optional[bool] = None
 
 
 class GetGroupsResponse(BaseModel):
@@ -34,4 +37,27 @@ class GetGroupsQueryParams(BaseModel):
     # page: Optional[int] = Query(default=1)
     # per_page: Optional[int] = Query(default=10)
     name: Optional[str] = Query(default=None)
+    is_member: Optional[str] = Query(default=None)
     sort_by: Optional[str] = Query(default=None)
+
+
+class GetGroupDetailResponse(GroupBase):
+    creator: str
+    total_member: int = Field(default=0)
+    total_lesson: int = Field(default=0)
+    total_like: int = Field(default=0)
+    image_path: Optional[str] = None
+    is_member: Optional[bool] = None
+    is_owner: Optional[bool] = None
+
+
+class GroupMemberItem(BaseModel):
+    id: int
+    user_id: int
+    name: Optional[str]
+    is_manager: bool
+    approved_at: Optional[datetime] = None
+
+
+class GetGroupMembersResponse(BaseModel):
+    data: List[GroupMemberItem] = Field(default=[])

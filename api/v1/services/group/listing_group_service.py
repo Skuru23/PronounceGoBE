@@ -1,4 +1,4 @@
-from sqlalchemy import func, literal
+from sqlalchemy import and_, case, func, literal
 from sqlmodel import Session, or_, select
 
 from models.group import Group
@@ -8,8 +8,8 @@ from models.user import User
 from schemas.group import GetGroupsQueryParams
 
 
-def listing_group(db: Session, query_params: GetGroupsQueryParams):
-    conditions = _build_conditions(query_params)
+def listing_group(db: Session, user: User, query_params: GetGroupsQueryParams):
+    conditions = _build_conditions(db, query_params, user)
 
     subquery = (
         select(
@@ -30,13 +30,25 @@ def listing_group(db: Session, query_params: GetGroupsQueryParams):
             Group.name,
             Group.description,
             Group.owner_id,
+            Group.image_path,
             User.name.label("creator"),
+            case((GroupMember.user_id == user.id, True), else_=False).label(
+                "is_member"
+            ),
             subquery.c.total_member,
             subquery.c.total_lesson,
             subquery.c.total_like,
         )
         .join(User, User.id == Group.owner_id)
         .join(subquery, subquery.c.id == Group.id)
+        .outerjoin(
+            GroupMember,
+            and_(
+                GroupMember.group_id == Group.id,
+                GroupMember.approved_at.isnot(None),
+                GroupMember.user_id == user.id,
+            ),
+        )
         .where(*conditions)
         .order_by(Group.id.desc())
         # .limit(query_params.per_page)
@@ -59,7 +71,7 @@ def _count_group(db: Session, conditions: list):
     return total
 
 
-def _build_conditions(query_params: GetGroupsQueryParams):
+def _build_conditions(db: Session, query_params: GetGroupsQueryParams, user: User):
     conditions = []
     if query_params.name:
         conditions.append(
@@ -68,5 +80,12 @@ def _build_conditions(query_params: GetGroupsQueryParams):
                 func.lower(User.name).contains(query_params.name),
             )
         )
+
+    if query_params.is_member:
+        if bool(query_params.is_member):
+            group_ids = db.exec(
+                select(GroupMember.group_id).where(GroupMember.user_id == user.id)
+            ).all()
+            conditions.append(Group.id.in_(group_ids))
 
     return conditions

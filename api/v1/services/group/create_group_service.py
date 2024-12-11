@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlmodel import Session, select
 
 from core.exception import BadRequestException, ErrorCode, ErrorMessage
@@ -25,7 +26,12 @@ def create_group(db: Session, user: User, request: CreateGroupRequest):
         db.add(group)
         db.flush()
 
-        first_member = GroupMember(group_id=group.id, user_id=user.id, is_manager=True)
+        first_member = GroupMember(
+            group_id=group.id,
+            user_id=user.id,
+            is_manager=True,
+            approved_at=datetime.now(),
+        )
         db.add(first_member)
         db.flush()
         db.commit()
