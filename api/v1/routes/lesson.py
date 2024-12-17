@@ -12,6 +12,7 @@ from schemas.lesson import (
     GetLessonQuery,
     LearnLessonResponse,
     ListLessonsResponse,
+    RecommendLessonResponse,
     UpdateLessonRequest,
 )
 from api.v1.services import lesson as lesson_services
@@ -41,6 +42,19 @@ def listing_lessons(
     lessons = lesson_services.get_lessons(db, query, user)
 
     return ListLessonsResponse(data=lessons)
+
+
+@router.get(
+    "/recommend",
+    response_model=RecommendLessonResponse,
+    responses=authenticated_api_responses,
+)
+def recommend_lessons(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    new_lessons, hot_lessons = lesson_services.recommend_lesson(db)
+    return RecommendLessonResponse(hot_lessons=hot_lessons, new_lessons=new_lessons)
 
 
 @router.get(

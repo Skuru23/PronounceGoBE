@@ -73,3 +73,8 @@ class UpdateLessonRequest(BaseModel):
 
 class LearnLessonResponse(BaseModel):
     progress: int
+
+
+class RecommendLessonResponse(BaseModel):
+    hot_lessons: List[LessonBase] = Field([], description="List of hot lessons")
+    new_lessons: List[LessonBase] = Field([], description="List of new lessons")

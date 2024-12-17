@@ -46,3 +46,9 @@ def access_denied_exception_handler(request: Request, exc: UnauthorizedException
 @app.exception_handler(ValueError)
 async def value_error_exception_handler(request: Request, exc: ValueError):
     return BadRequestResponse(400, str(exc))
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

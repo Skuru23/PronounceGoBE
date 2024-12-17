@@ -5,7 +5,7 @@ from api.v1.dependencies.authentication import get_current_user
 from core.response import authenticated_api_responses
 from db.database import get_db
 from models.user import User
-from schemas.user import UpdateUserRequest
+from schemas.user import UpdateUserRequest, UserResponse
 from api.v1.services import user as user_services
 
 router = APIRouter()
@@ -21,3 +21,11 @@ def update_user(
 ):
 
     user_services.update_information(db, user, request)
+
+
+@router.get("", response_model=UserResponse, responses=authenticated_api_responses)
+def get_user(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return user_services.get_user_detail(db, user)

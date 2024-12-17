@@ -5,6 +5,7 @@ from .get_lesson_detail_service import get_lesson_detail
 from .update_lesson_service import update_lesson
 from .unlike_lesson_service import unlike_lesson
 from .like_lesson_service import like_lesson
+from .recommend_lesson_service import recommend_lesson
 
 all = (
     create_lesson,

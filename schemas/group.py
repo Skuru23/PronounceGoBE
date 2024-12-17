@@ -9,6 +9,7 @@ class GroupBase(BaseModel):
     name: Optional[str]
     description: Optional[str]
     owner_id: Optional[int]
+    image_path: Optional[str] = None
 
 
 class CreateGroupRequest(BaseModel):
@@ -22,7 +23,6 @@ class GetGroupItem(GroupBase):
     total_member: int = Field(default=0)
     total_lesson: int = Field(default=0)
     total_like: int = Field(default=0)
-    image_path: Optional[str] = None
     is_member: Optional[bool] = None
 
 
@@ -46,7 +46,6 @@ class GetGroupDetailResponse(GroupBase):
     total_member: int = Field(default=0)
     total_lesson: int = Field(default=0)
     total_like: int = Field(default=0)
-    image_path: Optional[str] = None
     is_member: Optional[bool] = None
     is_owner: Optional[bool] = None
 
@@ -61,3 +60,7 @@ class GroupMemberItem(BaseModel):
 
 class GetGroupMembersResponse(BaseModel):
     data: List[GroupMemberItem] = Field(default=[])
+
+
+class ListingTopGroupResponse(BaseModel):
+    data: List[GroupBase] = Field(default=[])

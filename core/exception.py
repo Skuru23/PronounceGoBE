@@ -50,6 +50,8 @@ class ErrorCode:
     ERR_GROUP_MEMBER_NOT_FOUND = "ERR_GROUP_MEMBER_NOT_FOUND"
     ERR_USER_NOT_MANAGER = "ERR_USER_NOT_MANAGER"
 
+    ERR_INVALID_TOKEN = "ERR_INVALID_TOKEN"
+
 
 class ErrorMessage:
     ERR_UNAUTHORIZED = "You are not authorized"
@@ -66,3 +68,4 @@ class ErrorMessage:
     ERR_USER_ALREADY_JOINED_GROUP = "User already joined group"
     ERR_GROUP_MEMBER_NOT_FOUND = "Group member not found"
     ERR_USER_NOT_MANAGER = "User is not manager"
+    ERR_INVALID_TOKEN = "Invalid token"

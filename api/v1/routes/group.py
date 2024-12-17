@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from api.v1.dependencies.authentication import get_current_user
-from core.response import authenticated_api_responses
+from core.response import authenticated_api_responses, public_api_responses
 from db.database import get_db
 from models.user import User
 from schemas.group import (
@@ -12,6 +12,7 @@ from schemas.group import (
     GetGroupMembersResponse,
     GetGroupsQueryParams,
     GetGroupsResponse,
+    ListingTopGroupResponse,
 )
 from api.v1.services import group as group_services
 
@@ -36,8 +37,18 @@ def listing_group(
     user: User = Depends(get_current_user),
 ):
     groups, total = group_services.listing_group(db, user, query_params)
-
     return GetGroupsResponse(page=1, per_page=10, total=total, data=groups)
+
+
+@router.get(
+    "/top-groups",
+    response_model=ListingTopGroupResponse,
+    responses=public_api_responses,
+)
+def listing_top_group(db: Session = Depends(get_db)):
+    groups = group_services.listing_top_group(db)
+
+    return ListingTopGroupResponse(data=groups)
 
 
 @router.get(

@@ -3,7 +3,7 @@ import jwt
 
 from sqlmodel import select, Session
 from core.config import settings
-from core.exception import UnauthorizedException, ErrorCode
+from core.exception import BadRequestException, UnauthorizedException, ErrorCode
 from models.user import User
 from schemas.auth import TokenResponse
 
@@ -13,13 +13,13 @@ def refresh_token(db: Session, refresh_token: str):
         refresh_token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
     )
     if payload["exp"] < datetime.now().timestamp():
-        raise UnauthorizedException(ErrorCode.ERR_TOKEN_EXPIRED)
+        raise BadRequestException(ErrorCode.ERR_TOKEN_EXPIRED)
     if not payload["sub"]:
-        raise UnauthorizedException(ErrorCode.ERR_UNAUTHORIZED)
+        raise BadRequestException(ErrorCode.ERR_INVALID_TOKEN)
     user = db.exec(select(User).where(User.email == payload["sub"])).first()
 
     if not user:
-        raise UnauthorizedException(ErrorCode.ERR_UNAUTHORIZED)
+        raise BadRequestException(ErrorCode.ERR_INVALID_TOKEN)
 
     access_token_expires = datetime.now() + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES

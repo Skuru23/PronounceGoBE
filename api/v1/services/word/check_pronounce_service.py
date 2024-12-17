@@ -16,19 +16,18 @@ def check_pronounce(db: Session, request: CheckPronounceRequest):
 def check_pronounce_word(
     db: Session, speech_text: str, result_text: str, start_index: int = 0
 ):
-
     speech_text_ipa = get_ipa(db, speech_text)
-
-    if speech_text == result_text:
-        return 100, speech_text_ipa, []
-
     result_text_ipa = get_ipa(db, result_text)
+    if not result_text_ipa:
+        return 0, speech_text_ipa, []
+
+    if "".join(filter(str.isalnum, speech_text)) == "".join(
+        filter(str.isalnum, result_text)
+    ):
+        return 100, result_text_ipa, []
 
     if not speech_text_ipa:
         return 0, result_text_ipa, []
-
-    if not result_text_ipa:
-        return 0, speech_text_ipa, []
 
     accuracy_rate, error_ids = compare_ipa(
         speech_text_ipa, result_text_ipa, start_index
@@ -83,12 +82,15 @@ def compare_ipa(user_ipa: str, target_ipa: str, start_index: int):
         else:
             incorrect_positions.append(i + start_index)
 
+    # Add remaining characters in target_ipa to incorrect_positions
+    if len_target > len_user:
+        incorrect_positions.extend(
+            range(min_len + start_index, len_target + start_index)
+        )
+
     accuracy_rate = correct_count / max(len_user, len_target)
 
-    if incorrect_positions:
-        return accuracy_rate, incorrect_positions
-    else:
-        return accuracy_rate, []
+    return accuracy_rate, incorrect_positions
 
 
 def check_sentence_pronounce(db: Session, speech_text: str, result_text: str):

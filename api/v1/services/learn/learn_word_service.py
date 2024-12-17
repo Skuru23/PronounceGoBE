@@ -40,7 +40,6 @@ def learn_word(db: Session, user: User, progress_word_id: int, speech_text: str)
             ErrorCode.ERR_WORD_NOT_FOUND, ErrorMessage.ERR_WORD_NOT_FOUND
         )
 
-    print(word.word)
     accuracy_rate, result_text_ipa, error_ids = check_pronounce_word(
         db, speech_text, word.word
     )
