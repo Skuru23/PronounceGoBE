@@ -123,3 +123,16 @@ def unlike_lesson(
     user: User = Depends(get_current_user),
 ):
     lesson_services.unlike_lesson(db, user, lesson_id)
+
+
+@router.patch(
+    "/{lesson_id}/public",
+    status_code=HTTPStatus.NO_CONTENT,
+    responses=authenticated_api_responses,
+)
+def public_lesson(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    lesson_services.public_lesson(db, user, lesson_id)

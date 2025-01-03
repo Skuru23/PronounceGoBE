@@ -6,6 +6,8 @@ from .update_lesson_service import update_lesson
 from .unlike_lesson_service import unlike_lesson
 from .like_lesson_service import like_lesson
 from .recommend_lesson_service import recommend_lesson
+from .public_lesson_service import public_lesson
+
 
 all = (
     create_lesson,
@@ -15,4 +17,6 @@ all = (
     update_lesson,
     unlike_lesson,
     like_lesson,
+    recommend_lesson,
+    public_lesson,
 )
