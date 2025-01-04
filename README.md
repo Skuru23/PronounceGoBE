@@ -19,19 +19,21 @@
    cd PronounceGoBE
    ```
 
-2. Install dependencies using Poetry:
+2. Create .env
+
+3. Install dependencies using Poetry:
 
    ```sh
    poetry install
    ```
 
-3. Apply database migrations using Alembic:
+4. Apply database migrations using Alembic:
 
    ```sh
    alembic upgrade head
    ```
 
-4. Run the `add_to_db.py` script to populate the database:
+5. Run the `add_to_db.py` script to populate the database:
    ```sh
    python import_dictionary/add_to_db.py
    ```
