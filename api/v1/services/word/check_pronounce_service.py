@@ -40,7 +40,7 @@ def check_pronounce_word(
         return 0, speech_text_ipa, []
 
     accuracy_rate, error_ids = compare_ipa(
-        speech_text_ipa, result_text_ipa, start_index
+        result_text_ipa, speech_text_ipa, start_index
     )
 
     return (
@@ -131,7 +131,7 @@ def compare_ipa(ipa_standard: str, ipa_user: str, start_index: int):
         elif action == "insert":
             j -= 1
 
-    max_len = len_std
+    max_len = max(len_std, len_usr)
     score = max(0, (1 - dp[len_std][len_usr] / max_len))
 
     return round(score, 2), list(reversed(error_positions))

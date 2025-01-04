@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import case, func
 from sqlmodel import Session, select
 from models.group import Group
 from models.group_member import GroupMember
@@ -16,22 +16,56 @@ def get_user_detail(db: Session, user: User):
     subquery = (
         select(
             Progress.id,
-            func.count(ProgressWord.id.distinct()).label("remain_word"),
-            func.count(ProgressSentence.id.distinct()).label("remain_sentence"),
+            func.coalesce(
+                func.sum(case((ProgressWord.status != ItemStatus.DONE, 1), else_=0)),
+                0,
+            ).label("remain_word"),
+            func.coalesce(
+                func.sum(
+                    case((ProgressSentence.status != ItemStatus.DONE, 1), else_=0)
+                ),
+                0,
+            ).label("remain_sentence"),
         )
         .outerjoin(ProgressWord, ProgressWord.progress_id == Progress.id)
         .outerjoin(ProgressSentence, ProgressSentence.progress_id == Progress.id)
-        .where(ProgressWord.status != ItemStatus.DONE)
         .group_by(Progress.id)
         .subquery()
+    )
+
+    print(
+        db.exec(
+            select(
+                Progress.id,
+                func.coalesce(
+                    func.sum(
+                        case((ProgressWord.status != ItemStatus.DONE, 1), else_=0)
+                    ),
+                    0,
+                ).label("remain_word"),
+                func.coalesce(
+                    func.sum(
+                        case((ProgressSentence.status != ItemStatus.DONE, 1), else_=0)
+                    ),
+                    0,
+                ).label("remain_sentence"),
+            )
+            .outerjoin(ProgressWord, ProgressWord.progress_id == Progress.id)
+            .outerjoin(ProgressSentence, ProgressSentence.progress_id == Progress.id)
+            .group_by(Progress.id)
+        ).all()
     )
 
     progress = (
         db.exec(
             select(
                 Progress.id,
-                func.count(ProgressWord.id.distinct()).label("total_word"),
-                func.count(ProgressSentence.id.distinct()).label("total_sentence"),
+                func.coalesce(func.count(ProgressWord.id.distinct()), 0).label(
+                    "total_word"
+                ),
+                func.coalesce(func.count(ProgressSentence.id.distinct()), 0).label(
+                    "total_sentence"
+                ),
                 subquery.c.remain_word.label("remain_word"),
                 subquery.c.remain_sentence.label("remain_sentence"),
             )

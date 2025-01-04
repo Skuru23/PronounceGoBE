@@ -24,12 +24,19 @@ def get_progress_detail(db: Session, progress_id: int):
     subquery = (
         select(
             Progress.id,
-            func.count(ProgressWord.id.distinct()).label("remain_word"),
-            func.count(ProgressSentence.id.distinct()).label("remain_sentence"),
+            func.coalesce(
+                func.sum(case((ProgressWord.status != ItemStatus.DONE, 1), else_=0)),
+                0,
+            ).label("remain_word"),
+            func.coalesce(
+                func.sum(
+                    case((ProgressSentence.status != ItemStatus.DONE, 1), else_=0)
+                ),
+                0,
+            ).label("remain_sentence"),
         )
         .outerjoin(ProgressWord, ProgressWord.progress_id == Progress.id)
         .outerjoin(ProgressSentence, ProgressSentence.progress_id == Progress.id)
-        .where(ProgressWord.status != ItemStatus.DONE)
         .group_by(Progress.id)
         .subquery()
     )
